@@ -244,18 +244,36 @@ button.danger {
 
 .hero {
   position: relative;
-  height: clamp(280px, 46vh, 480px);
-  background-size: cover;
-  background-position: center;
+  height: clamp(160px, 28vh, 440px);
   display: flex;
   align-items: flex-end;
   overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-bg {
+    animation: kenburns 22s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
 }
 
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.05) 0%,
@@ -266,7 +284,7 @@ button.danger {
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding: 0 20px 28px;
   width: 100%;
 }
@@ -324,3 +342,37 @@ button.danger {
 }
 .grille .carte-face.back { padding: 18px 14px 14px; }
 .grille .carte-face.back .texte { font-size: 14px; line-height: 22px; }
+
+/* --- Modal d'agrandissement (clic sur une vignette de l'historique) --- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  z-index: 100;
+}
+
+.modal-backdrop.ouvert { display: flex; }
+
+.modal-carte-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+}
