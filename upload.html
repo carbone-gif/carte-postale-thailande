@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Envoyer une carte</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <h1>✍️ Carte du jour</h1>
+  <p class="subtitle">Une carte par jour — tu peux modifier ou supprimer celle du jour tant que tu veux.</p>
+
+  <div class="card-box">
+    <form id="form">
+      <label for="pin">Code</label>
+      <input type="password" id="pin" inputmode="numeric" autocomplete="off" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+
+      <label for="lieu">Lieu</label>
+      <select id="lieu">
+        <option value="Bangkok">Bangkok</option>
+        <option value="Chiang Mai">Chiang Mai</option>
+        <option value="Koh Samui">Koh Samui</option>
+        <option value="Koh Tao">Koh Tao</option>
+        <option value="autre">Autre…</option>
+      </select>
+      <input type="text" id="lieu-autre" placeholder="Précise le lieu" style="display:none; margin-top:8px;">
+
+      <label for="texte">Texte</label>
+      <textarea id="texte" placeholder="Qu'est-ce qu'on raconte aujourd'hui ?" required></textarea>
+
+      <label for="photo">Photo</label>
+      <input type="file" id="photo" accept="image/*">
+      <p id="photo-info" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></p>
+
+      <button type="submit" id="submit-btn">Envoyer la carte</button>
+      <button type="button" id="delete-btn" class="danger">Supprimer la carte de cette date</button>
+    </form>
+    <div id="msg"></div>
+  </div>
+
+  <div id="queue-box" style="display:none;" class="card-box">
+    <p style="margin:0 0 8px;font-weight:600;font-size:14px;">En attente d'envoi (pas de réseau)</p>
+    <div id="queue-list" style="font-size:13px;color:var(--text-muted);"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="upload.js"></script>
+</body>
+</html>

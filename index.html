@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Nos cartes postales de Thaïlande</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <h1>🌴 Nos cartes de Thaïlande</h1>
+  <p class="subtitle" id="subtitle">Chargement…</p>
+  <div id="content"></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+function formatDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+}
+
+function carteHTML(carte, { isJour }) {
+  return `
+    <div class="carte ${isJour ? "jour" : ""}" data-id="${carte.id}">
+      <div class="carte-inner">
+        <div class="carte-face front">
+          <span class="date-badge">${formatDate(carte.date)}</span>
+          <span class="flip-hint">Toucher pour lire ↻</span>
+          <img src="${carte.photo_url}" alt="Photo du ${carte.date}" loading="lazy">
+        </div>
+        <div class="carte-face back">
+          <div class="stamp">✈️</div>
+          <div class="lieu">${carte.lieu}</div>
+          <div class="texte">${carte.texte.replace(/</g, "&lt;")}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function charger() {
+  const params = new URLSearchParams(location.search);
+  const token = params.get("t");
+  const subtitle = document.getElementById("subtitle");
+  const content = document.getElementById("content");
+
+  if (!token) {
+    subtitle.textContent = "Lien incomplet.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${CONFIG.SUPABASE_FUNCTIONS_URL}/get-gallery?t=${encodeURIComponent(token)}`);
+    if (res.status === 401) {
+      subtitle.textContent = "Ce lien n'est plus valide.";
+      return;
+    }
+    const data = await res.json();
+    const cartes = data.cartes || [];
+
+    if (cartes.length === 0) {
+      subtitle.textContent = "";
+      content.innerHTML = `<div class="empty">La première carte arrive bientôt 🙂</div>`;
+      return;
+    }
+
+    subtitle.textContent = `${cartes.length} carte${cartes.length > 1 ? "s" : ""} reçue${cartes.length > 1 ? "s" : ""}`;
+
+    const [jour, ...historique] = cartes;
+    let html = carteHTML(jour, { isJour: true });
+
+    if (historique.length > 0) {
+      html += `<div class="historique-titre">Cartes précédentes</div>`;
+      html += historique.map((c) => carteHTML(c, { isJour: false })).join("");
+    }
+
+    content.innerHTML = html;
+
+    content.querySelectorAll(".carte").forEach((el) => {
+      el.addEventListener("click", () => el.classList.toggle("flipped"));
+    });
+  } catch (e) {
+    subtitle.textContent = "Impossible de charger les cartes pour le moment.";
+  }
+}
+
+charger();
+</script>
+</body>
+</html>

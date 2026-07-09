@@ -1,0 +1,241 @@
+:root {
+  --bg: #F2F2F7;
+  --card-bg: #FFFFFF;
+  --accent: #007AFF;
+  --text: #1C1C1E;
+  --text-muted: #6E6E73;
+  --danger: #FF3B30;
+  --radius: 18px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0 4px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
+/* --- Carte flip (élément signature) --- */
+
+.carte {
+  perspective: 1400px;
+  margin-bottom: 20px;
+}
+
+.carte-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  cursor: pointer;
+}
+
+.carte.flipped .carte-inner {
+  transform: rotateY(180deg);
+}
+
+.carte-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.carte-face.front {
+  background: #000;
+}
+
+.carte-face.front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carte-face.front .date-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(6px);
+}
+
+.carte-face.front .flip-hint {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 100px;
+}
+
+.carte-face.back {
+  transform: rotateY(180deg);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      #E5E5EA 27px,
+      #E5E5EA 28px
+    ),
+    #FFFDF7;
+  padding: 28px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.carte-face.back .lieu {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.carte-face.back .texte {
+  font-size: 16px;
+  line-height: 28px;
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+.carte-face.back .stamp {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 46px;
+  height: 56px;
+  border: 2px dashed #C7C7CC;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #C7C7CC;
+}
+
+/* Carte du jour, mise en avant */
+.carte.jour .carte-inner { aspect-ratio: 4 / 5; }
+.carte.jour .carte-face.back .texte { font-size: 17px; }
+
+/* Historique */
+.historique-titre {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 28px 0 12px;
+}
+
+/* --- Formulaires --- */
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 18px 0 6px;
+}
+
+input, select, textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #D1D1D6;
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+textarea { min-height: 110px; resize: vertical; }
+
+button {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  margin-top: 22px;
+  cursor: pointer;
+}
+
+button:active { opacity: 0.85; }
+
+button.secondary {
+  background: var(--card-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+button.danger {
+  background: var(--card-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.card-box {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.msg {
+  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+.msg.ok { background: #E4F8EE; color: #1A7F4E; }
+.msg.err { background: #FDEAEA; color: #C0392B; }
+.msg.pending { background: #FFF4E0; color: #B8720A; }
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 60px 20px;
+}
