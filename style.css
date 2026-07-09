@@ -300,20 +300,27 @@ button.danger {
   margin: 0 auto 8px;
 }
 
-/* Grille responsive pour l'historique */
+/* Grille responsive pour l'historique : 2 colonnes dès le mobile */
 .grille {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 @media (min-width: 640px) {
-  .grille { grid-template-columns: repeat(2, 1fr); }
+  .grille { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 }
 
 @media (min-width: 980px) {
-  .grille { grid-template-columns: repeat(3, 1fr); }
+  .grille { grid-template-columns: repeat(4, 1fr); }
   .carte-jour-wrap { max-width: 420px; }
 }
 
 .grille .carte { margin-bottom: 0; }
+.grille .carte-face.front .date-badge,
+.grille .carte-face.front .flip-hint {
+  font-size: 10px;
+  padding: 4px 8px;
+}
+.grille .carte-face.back { padding: 18px 14px 14px; }
+.grille .carte-face.back .texte { font-size: 14px; line-height: 22px; }
