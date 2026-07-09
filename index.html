@@ -3,18 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Nos cartes postales de Thaïlande</title>
+<title>Voyage Thaïlande 2026</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-  <h1>🌴 Nos cartes de Thaïlande</h1>
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <p class="hero-sub" id="hero-count"></p>
+    <h1>Voyage Thaïlande 2026</h1>
+  </div>
+</section>
+
+<div class="wrap wrap-wide">
   <p class="subtitle" id="subtitle">Chargement…</p>
   <div id="content"></div>
 </div>
 
 <script src="config.js"></script>
 <script>
+const HERO_PHOTOS = [
+  "assets/thai-waterfall.jpg",
+  "assets/thai-islands.jpg",
+  "assets/thai-sunset-swing.jpg",
+  "assets/thai-boats.jpg",
+  "assets/thai-temple-garden.jpg",
+  "assets/thai-hammock.jpg",
+  "assets/thai-lanterns.jpg",
+  "assets/thai-buddha.jpg",
+];
+
+document.getElementById("hero").style.backgroundImage =
+  `url(${HERO_PHOTOS[Math.floor(Math.random() * HERO_PHOTOS.length)]})`;
+
 function formatDate(iso) {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
@@ -43,6 +63,7 @@ async function charger() {
   const params = new URLSearchParams(location.search);
   const token = params.get("t");
   const subtitle = document.getElementById("subtitle");
+  const heroCount = document.getElementById("hero-count");
   const content = document.getElementById("content");
 
   if (!token) {
@@ -65,14 +86,17 @@ async function charger() {
       return;
     }
 
-    subtitle.textContent = `${cartes.length} carte${cartes.length > 1 ? "s" : ""} reçue${cartes.length > 1 ? "s" : ""}`;
+    subtitle.textContent = "";
+    heroCount.textContent = `${cartes.length} carte${cartes.length > 1 ? "s" : ""} reçue${cartes.length > 1 ? "s" : ""}`;
 
     const [jour, ...historique] = cartes;
-    let html = carteHTML(jour, { isJour: true });
+    let html = `<div class="carte-jour-wrap">${carteHTML(jour, { isJour: true })}</div>`;
 
     if (historique.length > 0) {
       html += `<div class="historique-titre">Cartes précédentes</div>`;
+      html += `<div class="grille">`;
       html += historique.map((c) => carteHTML(c, { isJour: false })).join("");
+      html += `</div>`;
     }
 
     content.innerHTML = html;
